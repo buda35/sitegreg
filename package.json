@@ -1,0 +1,35 @@
+{
+  "name": "site_greg2.0",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@supabase/auth-helpers-nextjs": "^0.4.0",
+    "@supabase/ssr": "^0.6.1",
+    "@supabase/storage-js": "^2.0.0",
+    "@supabase/supabase-js": "^2.0.0",
+    "bufferutil": "^4.0.9",
+    "framer-motion": "^12.9.4",
+    "lucide-react": "^0.244.0",
+    "next": "^15.3.1",
+    "nodemailer": "^6.10.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "utf-8-validate": "^6.0.5"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/nodemailer": "^6.4.17",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "autoprefixer": "^10.0.0",
+    "postcss": "^8.4.0",
+    "tailwindcss": "^3.2.0",
+    "typescript": "^5.0.0"
+  }
+}
