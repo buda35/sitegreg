@@ -1,6 +1,5 @@
 'use client';
 
-import { createBrowserClient } from '@supabase/ssr';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -9,24 +8,8 @@ export default function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const supabase = createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  );
-
-  useEffect(() => {
-    const checkAuth = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        router.push('/admin/login');
-      }
-      setIsLoading(false);
-    };
-
-    checkAuth();
-  }, [router, supabase.auth]);
 
   if (isLoading) {
     return (
@@ -49,8 +32,8 @@ export default function AdminLayout({
             <div className="flex items-center">
               <button
                 onClick={async () => {
-                  await supabase.auth.signOut();
-                  router.push('/admin/login');
+                  // await supabase.auth.signOut();
+                  // router.push('/admin/login');
                 }}
                 className="text-custom-grey hover:text-accent-red transition-colors"
               >

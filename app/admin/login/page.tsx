@@ -21,13 +21,15 @@ export default function LoginPage() {
     setError(null);
 
     try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
+      // const { error } = await supabase.auth.signInWithPassword({
+      //   email,
+      //   password,
+      // });
 
-      if (error) throw error;
-      router.push('/admin');
+      // if (error) throw error;
+      // router.push('/admin');
+      console.log('Login logic is not implemented without Supabase');
+      setError('Login is not available');
     } catch (error) {
       setError('Identifiants incorrects');
     } finally {

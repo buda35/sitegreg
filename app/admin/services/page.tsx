@@ -1,6 +1,5 @@
 'use client';
 
-import { createBrowserClient } from '@supabase/ssr';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Plus, Edit, Trash2, Image as ImageIcon } from 'lucide-react';
@@ -16,7 +15,7 @@ interface Service {
 
 export default function ServicesPage() {
   const [services, setServices] = useState<Service[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingService, setEditingService] = useState<Service | null>(null);
   const [formData, setFormData] = useState({
@@ -27,24 +26,19 @@ export default function ServicesPage() {
     image: null as File | null,
   });
 
-  const supabase = createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  );
-
   useEffect(() => {
-    fetchServices();
+    // fetchServices();
   }, []);
 
   const fetchServices = async () => {
     try {
-      const { data, error } = await supabase
-        .from('services')
-        .select('*')
-        .order('created_at', { ascending: false });
+      // const { data, error } = await supabase
+      //   .from('services')
+      //   .select('*')
+      //   .order('created_at', { ascending: false });
 
-      if (error) throw error;
-      setServices(data || []);
+      // if (error) throw error;
+      setServices([]);
     } catch (error) {
       console.error('Error fetching services:', error);
     } finally {
@@ -60,14 +54,15 @@ export default function ServicesPage() {
       let imageUrl = editingService?.image_url || null;
 
       if (formData.image) {
-        const fileExt = formData.image.name.split('.').pop();
-        const fileName = `${Math.random()}.${fileExt}`;
-        const { data: uploadData, error: uploadError } = await supabase.storage
-          .from('services')
-          .upload(fileName, formData.image);
+        // const fileExt = formData.image.name.split('.').pop();
+        // const fileName = `${Math.random()}.${fileExt}`;
+        // const { data: uploadData, error: uploadError } = await supabase.storage
+        //   .from('services')
+        //   .upload(fileName, formData.image);
 
-        if (uploadError) throw uploadError;
-        imageUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/services/${fileName}`;
+        // if (uploadError) throw uploadError;
+        // imageUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/services/${fileName}`;
+        console.log('Image upload is not implemented without Supabase');
       }
 
       const serviceData = {
@@ -79,21 +74,22 @@ export default function ServicesPage() {
       };
 
       if (editingService) {
-        const { error } = await supabase
-          .from('services')
-          .update(serviceData)
-          .eq('id', editingService.id);
-        if (error) throw error;
+        // const { error } = await supabase
+        //   .from('services')
+        //   .update(serviceData)
+        //   .eq('id', editingService.id);
+        // if (error) throw error;
+        resetForm();
       } else {
-        const { error } = await supabase
-          .from('services')
-          .insert(serviceData);
-        if (error) throw error;
+        // const { error } = await supabase
+        //   .from('services')
+        //   .insert(serviceData);
+        // if (error) throw error;
+        resetForm();
       }
 
       await fetchServices();
       setIsModalOpen(false);
-      resetForm();
     } catch (error) {
       console.error('Error saving service:', error);
     } finally {
@@ -105,12 +101,11 @@ export default function ServicesPage() {
     if (!confirm('Êtes-vous sûr de vouloir supprimer ce service ?')) return;
 
     try {
-      const { error } = await supabase
-        .from('services')
-        .delete()
-        .eq('id', id);
-      if (error) throw error;
-      await fetchServices();
+      // const { error } = await supabase
+      //   .from('services')
+      //   .delete()
+      //   .eq('id', id);
+      console.error('Error deleting service:', /* error */);
     } catch (error) {
       console.error('Error deleting service:', error);
     }

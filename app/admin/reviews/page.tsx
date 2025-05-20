@@ -1,21 +1,21 @@
 'use client';
 
-import { createBrowserClient } from '@supabase/ssr';
+// import { createBrowserClient } from '@supabase/ssr';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Plus, Edit, Trash2, Star } from 'lucide-react';
 
 interface Review {
-  id: string;
+  id: string | number;
   name: string;
   rating: number;
   comment: string;
-  created_at: string;
+  created_at?: string; // Make created_at optional as we won't fetch it from Supabase
 }
 
 export default function ReviewsPage() {
   const [reviews, setReviews] = useState<Review[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingReview, setEditingReview] = useState<Review | null>(null);
   const [formData, setFormData] = useState({
@@ -24,56 +24,60 @@ export default function ReviewsPage() {
     comment: '',
   });
 
-  const supabase = createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  );
+  // const supabase = createBrowserClient(
+  //   process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  //   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  // );
 
   useEffect(() => {
-    fetchReviews();
+    // fetchReviews();
+    // Since there's no backend, we'll just set an empty array for reviews
+    setReviews([]);
+    setIsLoading(false);
   }, []);
 
-  const fetchReviews = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('reviews')
-        .select('*')
-        .order('created_at', { ascending: false });
+  // const fetchReviews = async () => {
+  //   try {
+  //     const { data, error } = await supabase
+  //       .from('reviews')
+  //       .select('*')
+  //       .order('created_at', { ascending: false });
 
-      if (error) throw error;
-      setReviews(data || []);
-    } catch (error) {
-      console.error('Error fetching reviews:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  //     if (error) throw error;
+  //     setReviews(data || []);
+  //   } catch (error) {
+  //     console.error('Error fetching reviews:', error);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
     try {
-      const reviewData = {
-        name: formData.name,
-        rating: parseInt(formData.rating),
-        comment: formData.comment,
-      };
+      console.log('Form submission is not implemented without a backend');
+      // const reviewData = {
+      //   name: formData.name,
+      //   rating: parseInt(formData.rating),
+      //   comment: formData.comment,
+      // };
 
-      if (editingReview) {
-        const { error } = await supabase
-          .from('reviews')
-          .update(reviewData)
-          .eq('id', editingReview.id);
-        if (error) throw error;
-      } else {
-        const { error } = await supabase
-          .from('reviews')
-          .insert(reviewData);
-        if (error) throw error;
-      }
+      // if (editingReview) {
+      //   const { error } = await supabase
+      //     .from('reviews')
+      //     .update(reviewData)
+      //     .eq('id', editingReview.id);
+      //   if (error) throw error;
+      // } else {
+      //   const { error } = await supabase
+      //     .from('reviews')
+      //     .insert(reviewData);
+      //   if (error) throw error;
+      // }
 
-      await fetchReviews();
+      // await fetchReviews();
       setIsModalOpen(false);
       resetForm();
     } catch (error) {
@@ -87,12 +91,13 @@ export default function ReviewsPage() {
     if (!confirm('Êtes-vous sûr de vouloir supprimer cet avis ?')) return;
 
     try {
-      const { error } = await supabase
-        .from('reviews')
-        .delete()
-        .eq('id', id);
-      if (error) throw error;
-      await fetchReviews();
+      console.log('Delete logic is not implemented without a backend');
+      // const { error } = await supabase
+      //   .from('reviews')
+      //   .delete()
+      //   .eq('id', id);
+      // if (error) throw error;
+      // await fetchReviews();
     } catch (error) {
       console.error('Error deleting review:', error);
     }
@@ -172,13 +177,13 @@ export default function ReviewsPage() {
                 </div>
               </div>
               <p className="text-gray-600 mb-4">{review.comment}</p>
-              <div className="text-sm text-gray-500 mb-4">
+              {/* <div className="text-sm text-gray-500 mb-4">
                 {new Date(review.created_at).toLocaleDateString('fr-FR', {
                   year: 'numeric',
                   month: 'long',
                   day: 'numeric',
                 })}
-              </div>
+              </div> */}
               <div className="flex justify-end gap-2">
                 <motion.button
                   whileHover={{ scale: 1.1 }}
@@ -191,7 +196,7 @@ export default function ReviewsPage() {
                 <motion.button
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
-                  onClick={() => handleDelete(review.id)}
+                  onClick={() => handleDelete(review.id.toString())}
                   className="text-red-500 hover:text-red-400"
                 >
                   <Trash2 size={20} />

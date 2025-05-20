@@ -5,6 +5,7 @@ import StorySection from '@/components/StorySection';
 import ReviewSection from '@/components/ReviewSection';
 import MenuPage from '@/components/MenuPage';
 import Footer from '@/components/Footer';
+import Image from 'next/image';
 
 export default function Home() {
   return (

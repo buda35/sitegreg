@@ -14,6 +14,9 @@ module.exports = {
         'custom-grey': '#231F20',
         'dark-green': '#316131',
       },
+      fontFamily: {
+        sans: ['COCO', 'sans-serif'],
+      },
     },
   },
   plugins: [],

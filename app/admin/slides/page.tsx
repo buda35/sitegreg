@@ -1,13 +1,13 @@
 'use client';
 
-import { createBrowserClient } from '@supabase/ssr';
+// import { createBrowserClient } from '@supabase/ssr';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Plus, Edit, Trash2, Image as ImageIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 interface Slide {
-  id: string;
+  id: string | number;
   title: string;
   description: string;
   image_url: string;
@@ -17,7 +17,7 @@ interface Slide {
 export default function SlidesPage() {
   const router = useRouter();
   const [slides, setSlides] = useState<Slide[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingSlide, setEditingSlide] = useState<Slide | null>(null);
   const [formData, setFormData] = useState({
@@ -30,127 +30,130 @@ export default function SlidesPage() {
   // Fonction utilitaire pour générer l'URL locale du dossier uploads
   const getImageUrl = (path: string) => {
     if (!path) return '';
-    if (path.startsWith('http')) return path;
+    // if (path.startsWith('http')) return path;
     const fileName = path.split('/').pop();
     return `/uploads/${fileName}`;
   };
 
-  const supabase = createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  );
+  // const supabase = createBrowserClient(
+  //   process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  //   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  // );
 
   useEffect(() => {
-    checkAuth();
+    // checkAuth();
+    // Since there's no backend, we'll just set a dummy slide or empty array
+    setSlides([]);
+    setIsLoading(false);
   }, []);
 
-  const checkAuth = async () => {
-    const { data: { session }, error } = await supabase.auth.getSession();
-    if (error || !session) {
-      router.push('/admin/login');
-      return;
-    }
-    fetchSlides();
-  };
+  // const checkAuth = async () => {
+  //   const { data: { session }, error } = await supabase.auth.getSession();
+  //   if (error || !session) {
+  //     router.push('/admin/login');
+  //     return;
+  //   }
+  //   fetchSlides();
+  // };
 
-  const fetchSlides = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('slides')
-        .select('*')
-        .order('order_index', { ascending: true });
+  // const fetchSlides = async () => {
+  //   try {
+  //     const { data, error } = await supabase
+  //       .from('slides')
+  //       .select('*')
+  //       .order('order_index', { ascending: true });
 
-      if (error) throw error;
-      setSlides(data || []);
-    } catch (error) {
-      console.error('Error fetching slides:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  //     if (error) throw error;
+  //     setSlides(data || []);
+  //   } catch (error) {
+  //     console.error('Error fetching slides:', error);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
     try {
-      console.log('Début de la soumission du formulaire');
-      let imageUrl = editingSlide?.image_url || null;
+      console.log('Form submission is not implemented without a backend');
+      // let imageUrl = editingSlide?.image_url || null;
 
-      // Vérification des données du formulaire
-      if (!formData.title || !formData.description || !formData.order_index) {
-        throw new Error('Tous les champs sont obligatoires');
-      }
+      // // Vérification des données du formulaire
+      // if (!formData.title || !formData.description || !formData.order_index) {
+      //   throw new Error('Tous les champs sont obligatoires');
+      // }
 
-      if (formData.image) {
-        console.log('Téléchargement de l\'image...');
-        const fileExt = formData.image.name.split('.').pop();
-        const fileName = `${Math.random()}.${fileExt}`;
+      // if (formData.image) {
+      //   console.log('Téléchargement de l\'image...');
+      //   const fileExt = formData.image.name.split('.').pop();
+      //   const fileName = `${Math.random()}.${fileExt}`;
         
-        // Vérification du type de fichier
-        if (!['jpg', 'jpeg', 'png', 'webp'].includes(fileExt?.toLowerCase() || '')) {
-          throw new Error('Format d\'image non supporté. Utilisez JPG, JPEG, PNG ou WEBP.');
-        }
+      //   // Vérification du type de fichier
+      //   if (!['jpg', 'jpeg', 'png', 'webp'].includes(fileExt?.toLowerCase() || '')) {
+      //     throw new Error('Format d\'image non supporté. Utilisez JPG, JPEG, PNG ou WEBP.');
+      //   }
 
-        // Vérifier l'authentification avant le téléchargement
-        const { data: { session } } = await supabase.auth.getSession();
-        if (!session) {
-          throw new Error('Vous devez être connecté pour télécharger des images');
-        }
+      //   // Vérifier l'authentification avant le téléchargement
+      //   const { data: { session } } = await supabase.auth.getSession();
+      //   if (!session) {
+      //     throw new Error('Vous devez être connecté pour télécharger des images');
+      //   }
 
-        console.log('Tentative de téléchargement vers Supabase Storage...');
-        const { data: uploadData, error: uploadError } = await supabase.storage
-          .from('slides')
-          .upload(fileName, formData.image, {
-            cacheControl: '3600',
-            upsert: false
-          });
+      //   console.log('Tentative de téléchargement vers Supabase Storage...');
+      //   const { data: uploadData, error: uploadError } = await supabase.storage
+      //     .from('slides')
+      //     .upload(fileName, formData.image, {
+      //       cacheControl: '3600',
+      //       upsert: false
+      //     });
 
-        if (uploadError) {
-          console.error('Erreur lors du téléchargement de l\'image:', uploadError);
-          throw new Error(`Erreur de téléchargement: ${uploadError.message}`);
-        }
-        console.log('Image téléchargée avec succès');
-        // Stocker uniquement le chemin de l'image
-        imageUrl = `slides/${fileName}`;
-      }
+      //   if (uploadError) {
+      //     console.error('Erreur lors du téléchargement de l\'image:', uploadError);
+      //     throw new Error(`Erreur de téléchargement: ${uploadError.message}`);
+      //   }
+      //   console.log('Image téléchargée avec succès');
+      //   // Stocker uniquement le chemin de l'image
+      //   imageUrl = `slides/${fileName}`;
+      // }
 
-      const slideData = {
-        title: formData.title,
-        description: formData.description,
-        order_index: parseInt(formData.order_index),
-        image_url: imageUrl || '',
-      };
+      // const slideData = {
+      //   title: formData.title,
+      //   description: formData.description,
+      //   order_index: parseInt(formData.order_index),
+      //   image_url: imageUrl || '',
+      // };
 
-      console.log('Données du slide à enregistrer:', slideData);
+      // console.log('Données du slide à enregistrer:', slideData);
 
-      if (editingSlide) {
-        console.log('Mise à jour du slide existant');
-        const { data, error } = await supabase
-          .from('slides')
-          .update(slideData)
-          .eq('id', editingSlide.id)
-          .select();
-        if (error) {
-          console.error('Erreur lors de la mise à jour:', error);
-          throw new Error(`Erreur de mise à jour: ${error.message}`);
-        }
-        console.log('Slide mis à jour avec succès:', data);
-      } else {
-        console.log('Création d\'un nouveau slide');
-        const { data, error } = await supabase
-          .from('slides')
-          .insert(slideData)
-          .select();
-        if (error) {
-          console.error('Erreur lors de la création:', error);
-          throw new Error(`Erreur de création: ${error.message}`);
-        }
-        console.log('Slide créé avec succès:', data);
-      }
+      // if (editingSlide) {
+      //   console.log('Mise à jour du slide existant');
+      //   const { data, error } = await supabase
+      //     .from('slides')
+      //     .update(slideData)
+      //     .eq('id', editingSlide.id)
+      //     .select();
+      //   if (error) {
+      //     console.error('Erreur lors de la mise à jour:', error);
+      //     throw new Error(`Erreur de mise à jour: ${error.message}`);
+      //   }
+      //   console.log('Slide mis à jour avec succès:', data);
+      // } else {
+      //   console.log('Création d\'un nouveau slide');
+      //   const { data, error } = await supabase
+      //     .from('slides')
+      //     .insert(slideData)
+      //     .select();
+      //   if (error) {
+      //     console.error('Erreur lors de la création:', error);
+      //     throw new Error(`Erreur de création: ${error.message}`);
+      //   }
+      //   console.log('Slide créé avec succès:', data);
+      // }
 
-      console.log('Rafraîchissement des slides...');
-      await fetchSlides();
+      // console.log('Rafraîchissement des slides...');
+      // await fetchSlides();
       console.log('Fermeture de la modale...');
       setIsModalOpen(false);
       resetForm();
@@ -168,12 +171,13 @@ export default function SlidesPage() {
     if (!confirm('Êtes-vous sûr de vouloir supprimer ce slide ?')) return;
 
     try {
-      const { error } = await supabase
-        .from('slides')
-        .delete()
-        .eq('id', id);
-      if (error) throw error;
-      await fetchSlides();
+      console.log('Delete logic is not implemented without a backend');
+      // const { error } = await supabase
+      //   .from('slides')
+      //   .delete()
+      //   .eq('id', id);
+      // if (error) throw error;
+      // await fetchSlides();
     } catch (error) {
       console.error('Error deleting slide:', error);
     }
@@ -273,7 +277,7 @@ export default function SlidesPage() {
                   <motion.button
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
-                    onClick={() => handleDelete(slide.id)}
+                    onClick={() => handleDelete(slide.id.toString())}
                     className="text-red-500 hover:text-red-400"
                   >
                     <Trash2 size={20} />
