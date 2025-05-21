@@ -6,6 +6,7 @@ import ReviewSection from '@/components/ReviewSection';
 import MenuPage from '@/components/MenuPage';
 import Footer from '@/components/Footer';
 import Image from 'next/image';
+import GranulesArticle from '@/components/GranulesArticle';
 
 export default function Home() {
   return (
@@ -16,6 +17,9 @@ export default function Home() {
       </div>
       <div id="about">
         <StorySection />
+      </div>
+      <div id="granules-article">
+        <GranulesArticle />
       </div>
       <div id="services">
         <MenuPage />

@@ -121,7 +121,7 @@ const MenuPage: React.FC = () => {
                     onClick={() => setIsModalOpen(true)}
                   >
                     <ShoppingCart {...cartIconProps} />
-                    Commander
+                    Demander un devis
                   </motion.button>
                 </div>
               </div>

@@ -6,7 +6,7 @@ import Logo from './Logo';
 
 const Footer: React.FC = () => {
   const socialLinks = [
-    { icon: Facebook, href: '#' },
+    { icon: Facebook, href: 'https://www.facebook.com/profile.php?id=61565878054958' },
     { icon: Instagram, href: '#' },
     { icon: Twitter, href: '#' },
   ];
@@ -39,23 +39,28 @@ const Footer: React.FC = () => {
             <div className="space-y-2">
               <div className="flex items-center space-x-2">
                 <Phone {...contactIconProps} />
-                <span>01 23 45 67 89</span>
+                <span>02 97 57 51 23</span>
               </div>
               <div className="flex items-center space-x-2">
                 <Mail {...contactIconProps} />
-                <span>contact@ramonage.fr</span>
+                <span>braisesinstallations@live.fr</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <span>Vialgoët, 56390 Brandivy</span>
               </div>
             </div>
           </div>
 
           {/* Social Links */}
-          <div className="space-y-4">
+          <div>
             <h3 className="text-xl font-bold">Suivez-nous</h3>
             <div className="flex space-x-4">
               {socialLinks.map((social, index) => (
                 <a
                   key={index}
                   href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
                   <social.icon {...iconProps} />
                 </a>

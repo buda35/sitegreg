@@ -21,6 +21,7 @@ const Navigation: React.FC = () => {
   const navItems = [
     { label: 'Accueil', href: '#home' },
     { label: 'Services', href: '#services' },
+    { label: 'Le comptoir à granulés', href: '#granules-article'},
     { label: 'À propos', href: '#about' },
     { label: 'Témoignages', href: '#reviews' },
     { label: 'Contact', href: '#contact' },

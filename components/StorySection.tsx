@@ -1,7 +1,14 @@
+'use client';
+
 import React from 'react';
 import Image from 'next/image';
+import { motion } from 'framer-motion';
+import { Info } from 'lucide-react';
+import CompanyInfoModal from './CompanyInfoModal';
 
 const StorySection: React.FC = () => {
+  const [isCompanyInfoOpen, setIsCompanyInfoOpen] = React.useState(false);
+
   const realizationImages = [
     '/uploads/20250424_150717.jpg',
     '/uploads/IMG_20191105_110521.jpg',
@@ -30,11 +37,17 @@ const StorySection: React.FC = () => {
           <p className="text-lg text-gray-600">
             Basés à Brandivy, nous intervenons rapidement sur tout le Morbihan pour vous accompagner dans la création d'un foyer chaleureux et sécurisé.
           </p>
-          <button className="bg-accent-yellow text-custom-grey px-8 py-3 rounded-lg hover:bg-accent-yellow/90 transition-colors shadow-lg">
-            En savoir plus
-          </button>
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setIsCompanyInfoOpen(true)}
+            className="bg-accent-yellow text-custom-grey px-4 py-2 rounded-lg hover:bg-accent-yellow/90 transition-colors flex items-center gap-2"
+          >
+            <Info size={20} />
+            Informations entreprise
+          </motion.button>
         </div>
-        {/* Image Gallery Column */}
+        
         <div>
           <p className="text-sm text-gray-600 text-center mb-4">réalisations 2025</p>
           <div className="grid grid-cols-2 gap-4 rounded-lg overflow-hidden">
@@ -51,6 +64,7 @@ const StorySection: React.FC = () => {
           </div>
         </div>
       </div>
+      <CompanyInfoModal isOpen={isCompanyInfoOpen} onClose={() => setIsCompanyInfoOpen(false)} />
     </section>
   );
 };
