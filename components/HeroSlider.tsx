@@ -139,16 +139,18 @@ export default function HeroSlider() {
           className="absolute inset-0"
         >
           {imageUrl ? (
-            <img
-              src={imageUrl}
-              alt={currentSlideData.title}
-              className="w-full h-full object-cover"
-              onError={(e) => {
-                console.error('Erreur de chargement de l\'image:', e);
-                const target = e.target as HTMLImageElement;
-                target.style.display = 'none';
-              }}
-            />
+            <div className="relative w-full h-full mx-auto">
+              <img
+                src={imageUrl}
+                alt={currentSlideData.title}
+                className="w-full h-full object-contain"
+                onError={(e) => {
+                  console.error('Erreur de chargement de l\'image:', e);
+                  const target = e.target as HTMLImageElement;
+                  target.style.display = 'none';
+                }}
+              />
+            </div>
           ) : (
             <div className="w-full h-full bg-gray-200 flex items-center justify-center">
               <p className="text-gray-500">Image non disponible</p>
